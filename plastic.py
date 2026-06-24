@@ -3,11 +3,11 @@ import time
 import pandas as pd
 import numpy as np
 
+# 💡 slope_IR_VIS가 제외된 18개 순수 파장 채널만 정의
 CHANNELS = [
     '410nm', '435nm', '460nm', '485nm', '510nm', '535nm',
     '560nm', '585nm', '610nm', '645nm', '680nm', '705nm',
-    '730nm', '760nm', '810nm', '860nm', '900nm', '940nm',
-    'slope_IR_VIS'
+    '730nm', '760nm', '810nm', '860nm', '900nm', '940nm'
 ]
 
 def read_sensor(sensor):
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     input("플라스틱 올리고 준비되면 Enter 누르세요...")
 
     measurements = []
-    data_list = []  # 💡 예외 상황 안정성을 위한 초기화 위치 변경
+    data_list = []  # 예외 상황 안정성을 위한 초기화
 
     try:
         for i in range(1, n + 1):
@@ -94,15 +94,12 @@ if __name__ == "__main__":
         safe_baseline = np.where(baseline == 0, 1e-10, baseline)
         ratio = avg_raw / safe_baseline
 
-        # 스펙트럼 기울기: 장파장(NIR) / 단파장(VIS)
-        ir_mean = (ratio[16] + ratio[17]) / 2.0      # 900nm, 940nm
-        vis_mean = (ratio[0] + ratio[1]) / 2.0       # 410nm, 435nm
-        slope = ir_mean / vis_mean if vis_mean > 1e-10 else 0
-
-        row = list(ratio) + [slope, label]
+        # 🎯 [변경 핵심] slope 관련 계산 및 데이터 가공 파트를 제거했습니다.
+        row = list(ratio) + [label]
         data_list = [row]
 
         save_data(data_list, label, n)
+        
         sensor.disable_bulb(sensor.kLedUv)      # UV LED
         sensor.disable_bulb(sensor.kLedWhite)   # White LED
         sensor.disable_bulb(sensor.kLedIr)      # IR LED
