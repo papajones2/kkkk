@@ -1,0 +1,25 @@
+# 시스템/환경 파일
+.vscode-server/
+.cache/
+.config/
+.local/
+.dotnet/
+.copilot/
+.claude/
+.claude.json
+__pycache__/
+*.pyc
+
+# 개인 설정
+.bash_history
+.bash_logout
+.bashrc
+.profile
+.gitconfig
+.wget-hsts
+.xsession-errors
+.xsession-errors.old
+.Xauthority
+.sudo_as_admin_successful
+.vscode/
+Desktop/
